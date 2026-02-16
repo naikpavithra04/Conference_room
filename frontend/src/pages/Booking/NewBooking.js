@@ -1,17 +1,20 @@
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import BookingForm from "../../components/BookingForm";
+import { createBooking } from "../../api/bookingApi";
 
 const NewBooking = () => {
   const { roomId } = useParams();
   const navigate = useNavigate();
 
-  const handleBookingSubmit = (data) => {
-    console.log("Booking Data:", data);
-
-    // Later replace with axios call
-    alert("Booking Request Sent Successfully!");
-    navigate("/booking/history");
+  const handleBookingSubmit = async (data) => {
+    try {
+      await createBooking(data);
+      alert("Booking Request Sent!");
+      navigate("/booking/history");
+    } catch (error) {
+      alert("Booking Failed");
+    }
   };
 
   return (

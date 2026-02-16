@@ -1,20 +1,33 @@
-import React, { useContext } from "react";
-import { BookingContext } from "../../context/BookingContext";
+import React, { useEffect, useState } from "react";
+import { getMyBookings } from "../../api/bookingApi";
 import { useNavigate } from "react-router-dom";
 
 const BookingHistory = () => {
-  const { bookings } = useContext(BookingContext);
+  const [bookings, setBookings] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchBookings();
+  }, []);
+
+  const fetchBookings = async () => {
+    try {
+      const data = await getMyBookings();
+      setBookings(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="container mt-5">
-      <h3>My Booking History</h3>
+      <h3>My Bookings</h3>
 
       {bookings.length === 0 ? (
-        <p>No bookings yet.</p>
+        <p>No bookings found.</p>
       ) : (
-        bookings.map((booking, index) => (
-          <div key={index} className="card mb-3">
+        bookings.map((booking) => (
+          <div key={booking._id} className="card mb-3">
             <div className="card-body">
               <p>Date: {booking.date}</p>
               <p>Time: {booking.timeSlot}</p>
@@ -23,7 +36,7 @@ const BookingHistory = () => {
               <button
                 className="btn btn-info btn-sm"
                 onClick={() =>
-                  navigate("/booking/details", { state: { booking } })
+                  navigate(`/booking/details/${booking._id}`)
                 }
               >
                 View Details

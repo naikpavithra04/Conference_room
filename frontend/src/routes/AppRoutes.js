@@ -8,6 +8,8 @@ import ProtectedRoute from "./ProtectedRoute";
 import NewBooking from "../pages/Booking/NewBooking";
 import BookingDetails from "../pages/Booking/BookingDetails";
 import BookingHistory from "../pages/Booking/BookingHistory";
+import ApproveBookings from "../pages/Admin/ApproveBookings";
+import ManageRooms from "../pages/Admin/ManageRooms";
 
 const AppRoutes = () => {
   return (
@@ -26,7 +28,28 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
+      <Route
+  path="/admin/bookings"
+  element={
+    <ProtectedRoute>
+      <ApproveBookings />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/admin/rooms"
+  element={
+    <ProtectedRoute>
+      <ManageRooms />
+    </ProtectedRoute>
+  }
+/>
+
     </Routes>
+    
+
+
   );
 };
 

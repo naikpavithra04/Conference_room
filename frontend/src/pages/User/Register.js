@@ -1,13 +1,26 @@
 import React, { useState } from "react";
+import { registerUser } from "../../api/userApi";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
 
-  const handleSubmit = (e) => {
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert("Registered Successfully");
+
+    try {
+      await registerUser(form);
+      alert("Registered Successfully");
+      navigate("/login");
+    } catch (error) {
+      alert("Registration Failed");
+    }
   };
 
   return (
@@ -16,21 +29,20 @@ const Register = () => {
       <form onSubmit={handleSubmit}>
         <input
           className="form-control mb-3"
-          type="text"
           placeholder="Name"
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => setForm({ ...form, name: e.target.value })}
         />
         <input
           className="form-control mb-3"
-          type="email"
           placeholder="Email"
-          onChange={(e) => setEmail(e.target.value)}
+          type="email"
+          onChange={(e) => setForm({ ...form, email: e.target.value })}
         />
         <input
           className="form-control mb-3"
-          type="password"
           placeholder="Password"
-          onChange={(e) => setPassword(e.target.value)}
+          type="password"
+          onChange={(e) => setForm({ ...form, password: e.target.value })}
         />
         <button className="btn btn-success">Register</button>
       </form>
