@@ -38,13 +38,14 @@ const AppRoutes = () => {
 />
 
 <Route
-  path="/admin/rooms"
+  path="/admin/manage-rooms"
   element={
     <ProtectedRoute>
       <ManageRooms />
     </ProtectedRoute>
   }
 />
+
 
     </Routes>
     

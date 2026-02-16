@@ -11,40 +11,32 @@ const BookingHistory = () => {
   }, []);
 
   const fetchBookings = async () => {
-    try {
-      const data = await getMyBookings();
-      setBookings(data);
-    } catch (error) {
-      console.log(error);
-    }
+    const data = await getMyBookings();
+    setBookings(data);
   };
 
   return (
     <div className="container mt-5">
-      <h3>My Bookings</h3>
+      <h3>My Booking History</h3>
 
-      {bookings.length === 0 ? (
-        <p>No bookings found.</p>
-      ) : (
-        bookings.map((booking) => (
-          <div key={booking._id} className="card mb-3">
-            <div className="card-body">
-              <p>Date: {booking.date}</p>
-              <p>Time: {booking.timeSlot}</p>
-              <p>Status: {booking.status}</p>
+      {bookings.map((booking) => (
+        <div key={booking._id} className="card mb-3">
+          <div className="card-body">
+            <p>Date: {booking.date}</p>
+            <p>Time: {booking.timeSlot}</p>
+            <p>Status: {booking.status}</p>
 
-              <button
-                className="btn btn-info btn-sm"
-                onClick={() =>
-                  navigate(`/booking/details/${booking._id}`)
-                }
-              >
-                View Details
-              </button>
-            </div>
+            <button
+              className="btn btn-info btn-sm"
+              onClick={() =>
+                navigate("/booking/details", { state: { booking } })
+              }
+            >
+              View Details
+            </button>
           </div>
-        ))
-      )}
+        </div>
+      ))}
     </div>
   );
 };

@@ -1,16 +1,25 @@
-import axiosInstance from "./axiosInstance";
+import BASE_URL from "./base";
 
-export const createBooking = async (data) => {
-  const response = await axiosInstance.post("/bookings", data);
-  return response.data;
+export const createBooking = async (bookingData) => {
+  const res = await fetch(`${BASE_URL}/bookings`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(bookingData),
+  });
+
+  return res.json();
 };
 
 export const getMyBookings = async () => {
-  const response = await axiosInstance.get("/bookings/my");
-  return response.data;
+  const res = await fetch(`${BASE_URL}/bookings/my`);
+
+  return res.json();
 };
 
 export const getBookingById = async (id) => {
-  const response = await axiosInstance.get(`/bookings/${id}`);
-  return response.data;
+  const res = await fetch(`${BASE_URL}/bookings/${id}`);
+
+  return res.json();
 };

@@ -1,34 +1,59 @@
-import axiosInstance from "./axiosInstance";
+import BASE_URL from "./base";
 
-// Existing functions...
+/* ================= BOOKING ================= */
+
 export const getAllBookings = async () => {
-  const response = await axiosInstance.get("/admin/bookings");
-  return response.data;
+  const res = await fetch(`${BASE_URL}/admin/bookings`);
+  return res.json();
 };
 
 export const updateBookingStatus = async (id, status) => {
-  const response = await axiosInstance.put(`/admin/bookings/${id}`, { status });
-  return response.data;
+  const res = await fetch(`${BASE_URL}/admin/bookings/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ status }),
+  });
+
+  return res.json();
 };
 
-// ✅ ROOM MANAGEMENT APIs
+/* ================= ROOMS ================= */
 
 export const getAllRooms = async () => {
-  const response = await axiosInstance.get("/admin/rooms");
-  return response.data;
+  const res = await fetch(`${BASE_URL}/admin/rooms`);
+  return res.json();
 };
 
-export const createRoom = async (data) => {
-  const response = await axiosInstance.post("/admin/rooms", data);
-  return response.data;
+export const addRoom = async (roomData) => {
+  const res = await fetch(`${BASE_URL}/admin/rooms`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(roomData),
+  });
+
+  return res.json();
 };
 
-export const updateRoom = async (id, data) => {
-  const response = await axiosInstance.put(`/admin/rooms/${id}`, data);
-  return response.data;
+export const updateRoom = async (id, roomData) => {
+  const res = await fetch(`${BASE_URL}/admin/rooms/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(roomData),
+  });
+
+  return res.json();
 };
 
 export const deleteRoom = async (id) => {
-  const response = await axiosInstance.delete(`/admin/rooms/${id}`);
-  return response.data;
+  const res = await fetch(`${BASE_URL}/admin/rooms/${id}`, {
+    method: "DELETE",
+  });
+
+  return res.json();
 };

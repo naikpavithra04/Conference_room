@@ -8,12 +8,11 @@ const NewBooking = () => {
   const navigate = useNavigate();
 
   const handleBookingSubmit = async (data) => {
-    try {
-      await createBooking(data);
-      alert("Booking Request Sent!");
+    const response = await createBooking(data);
+
+    if (response) {
+      alert("Booking Created Successfully");
       navigate("/booking/history");
-    } catch (error) {
-      alert("Booking Failed");
     }
   };
 
