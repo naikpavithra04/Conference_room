@@ -1,135 +1,43 @@
 import React, { useEffect, useState } from "react";
-import {
-  getAllRooms,
-  addRoom,
-  updateRoom,
-  deleteRoom,
-} from "../../api/adminApi";
+import axios from "axios";
 
 const ManageRooms = () => {
   const [rooms, setRooms] = useState([]);
-  const [form, setForm] = useState({
-    name: "",
-    capacity: "",
-    location: "",
-  });
-
-  const [editId, setEditId] = useState(null);
 
   useEffect(() => {
     fetchRooms();
   }, []);
 
   const fetchRooms = async () => {
-    try {
-      const data = await getAllRooms();
-      setRooms(data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      if (editId) {
-        await updateRoom(editId, form);
-        alert("Room Updated");
-      } else {
-        await addRoom(form);
-        alert("Room Added");
-      }
-
-      setForm({ name: "", capacity: "", location: "" });
-      setEditId(null);
-      fetchRooms();
-    } catch (err) {
-      alert("Error saving room");
-    }
-  };
-
-  const handleEdit = (room) => {
-    setForm({
-      name: room.name,
-      capacity: room.capacity,
-      location: room.location,
-    });
-    setEditId(room._id);
-  };
-
-  const handleDelete = async (id) => {
-    try {
-      await deleteRoom(id);
-      alert("Room Deleted");
-      fetchRooms();
-    } catch (err) {
-      alert("Delete Failed");
-    }
+    const res = await axios.get("http://localhost:5000/api/rooms");
+    setRooms(res.data);
   };
 
   return (
     <div className="container mt-5">
-      <h3>Manage Rooms</h3>
+      <h2>Manage Rooms</h2>
 
-      {/* ADD / EDIT ROOM FORM */}
-      <form onSubmit={handleSubmit} className="mb-4">
-        <input
-          className="form-control mb-2"
-          placeholder="Room Name"
-          value={form.name}
-          onChange={(e) =>
-            setForm({ ...form, name: e.target.value })
-          }
-        />
+      <table className="table mt-4">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Capacity</th>
+            <th>Location</th>
+            <th>Price</th>
+          </tr>
+        </thead>
 
-        <input
-          className="form-control mb-2"
-          placeholder="Capacity"
-          value={form.capacity}
-          onChange={(e) =>
-            setForm({ ...form, capacity: e.target.value })
-          }
-        />
-
-        <input
-          className="form-control mb-2"
-          placeholder="Location"
-          value={form.location}
-          onChange={(e) =>
-            setForm({ ...form, location: e.target.value })
-          }
-        />
-
-        <button className="btn btn-primary">
-          {editId ? "Update Room" : "Add Room"}
-        </button>
-      </form>
-
-      {/* ROOM LIST */}
-      {rooms.map((room) => (
-        <div key={room._id} className="card mb-2 shadow-sm">
-          <div className="card-body">
-            <h5>{room.name}</h5>
-            <p>Capacity: {room.capacity}</p>
-            <p>Location: {room.location}</p>
-
-            <button
-              className="btn btn-warning btn-sm me-2"
-              onClick={() => handleEdit(room)}
-            >
-              Edit
-            </button>
-
-            <button
-              className="btn btn-danger btn-sm"
-              onClick={() => handleDelete(room._id)}
-            >
-              Delete
-            </button>
-          </div>
-        </div>
-      ))}
+        <tbody>
+          {rooms.map((room) => (
+            <tr key={room._id}>
+              <td>{room.name}</td>
+              <td>{room.capacity}</td>
+              <td>{room.location}</td>
+              <td>{room.price}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };

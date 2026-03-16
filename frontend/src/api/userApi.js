@@ -13,7 +13,8 @@ export const registerUser = async (userData) => {
 };
 
 export const loginUser = async (userData) => {
-  const res = await fetch(`${BASE_URL}/users/login`, {
+
+  const res = await fetch("http://localhost:5000/api/users/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -21,5 +22,11 @@ export const loginUser = async (userData) => {
     body: JSON.stringify(userData),
   });
 
-  return res.json();
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data.message);
+  }
+
+  return data;
 };

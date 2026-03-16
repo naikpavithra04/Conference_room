@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getAllBookings, updateBookingStatus } from "../../api/adminApi";
+import axios from "axios";
 
 const ApproveBookings = () => {
   const [bookings, setBookings] = useState([]);
@@ -9,83 +9,61 @@ const ApproveBookings = () => {
   }, []);
 
   const fetchBookings = async () => {
-    try {
-      const data = await getAllBookings();
-      setBookings(data);
-    } catch (error) {
-      console.error("Error fetching bookings", error);
-    }
+    const res = await axios.get("http://localhost:5000/api/bookings");
+    setBookings(res.data);
   };
 
-  const handleStatusChange = async (id, status) => {
-    try {
-      await updateBookingStatus(id, status);
+  const approveBooking = async (id) => {
+    await axios.post(`http://localhost:5000/api/admin/approve`, { id });
+    alert("Booking Approved");
+  };
 
-      // Update UI instantly
-      setBookings((prev) =>
-        prev.map((booking) =>
-          booking._id === id ? { ...booking, status } : booking
-        )
-      );
-    } catch (error) {
-      alert("Failed to update booking");
-    }
+  const rejectBooking = async (id) => {
+    await axios.post(`http://localhost:5000/api/admin/reject`, { id });
+    alert("Booking Rejected");
   };
 
   return (
     <div className="container mt-5">
-      <h3>Approve / Reject Bookings</h3>
+      <h2>Approve Bookings</h2>
 
-      {bookings.length === 0 ? (
-        <p>No bookings available.</p>
-      ) : (
-        bookings.map((booking) => (
-          <div key={booking._id} className="card mb-3 shadow-sm">
-            <div className="card-body">
-              <h5>Room: {booking.room?.name}</h5>
-              <p>User: {booking.user?.name}</p>
-              <p>Date: {booking.date}</p>
-              <p>Time: {booking.timeSlot}</p>
-              <p>
-                Status:{" "}
-                <strong
-                  className={
-                    booking.status === "Approved"
-                      ? "text-success"
-                      : booking.status === "Rejected"
-                      ? "text-danger"
-                      : "text-warning"
-                  }
+      <table className="table mt-4">
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Room</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {bookings.map((b) => (
+            <tr key={b._id}>
+              <td>{b.user?.name}</td>
+              <td>{b.room?.name}</td>
+              <td>{b.date}</td>
+              <td>{b.status}</td>
+              <td>
+                <button
+                  className="btn btn-success me-2"
+                  onClick={() => approveBooking(b._id)}
                 >
-                  {booking.status}
-                </strong>
-              </p>
+                  Approve
+                </button>
 
-              {booking.status === "Pending" && (
-                <>
-                  <button
-                    className="btn btn-success btn-sm me-2"
-                    onClick={() =>
-                      handleStatusChange(booking._id, "Approved")
-                    }
-                  >
-                    Approve
-                  </button>
-
-                  <button
-                    className="btn btn-danger btn-sm"
-                    onClick={() =>
-                      handleStatusChange(booking._id, "Rejected")
-                    }
-                  >
-                    Reject
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
-        ))
-      )}
+                <button
+                  className="btn btn-danger"
+                  onClick={() => rejectBooking(b._id)}
+                >
+                  Reject
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
