@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { loginUser } from "../../api/userApi";
 
 const Login = () => {
+
+  const { role } = useParams(); // user or admin
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -16,7 +18,12 @@ const Login = () => {
 
       const data = await loginUser({ email, password });
 
-      if (data.user.role === "admin") {
+      if (data.user.role !== role) {
+        alert("Access denied!");
+        return;
+      }
+
+      if (role === "admin") {
         navigate("/admin/dashboard");
       } else {
         navigate("/user/dashboard");
@@ -29,7 +36,10 @@ const Login = () => {
 
   return (
     <div className="container mt-5">
-      <h3>Login</h3>
+
+      <h3>
+        {role === "admin" ? "Admin Login" : "User Login"}
+      </h3>
 
       <form onSubmit={handleSubmit}>
 
@@ -39,6 +49,7 @@ const Login = () => {
           className="form-control mb-3"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          required
         />
 
         <input
@@ -47,10 +58,17 @@ const Login = () => {
           className="form-control mb-3"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
         />
 
-        <button className="btn btn-primary">
-          Login
+        <button
+          className={
+            role === "admin"
+              ? "btn btn-danger"
+              : "btn btn-primary"
+          }
+        >
+          {role === "admin" ? "Admin Login" : "User Login"}
         </button>
 
       </form>

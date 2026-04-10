@@ -1,44 +1,15 @@
 const express = require("express");
 const router = express.Router();
-const User = require("../models/user");
 
-// User Registration
-router.post("/register", async (req, res) => {
-  try {
-    const { name, email, password } = req.body;
+const userController = require("../controllers/userController");
 
-    const newUser = new User({
-      name,
-      email,
-      password,
-      role: "user"
-    });
+/* rooms */
+router.get("/rooms", userController.getRooms);
 
-    await newUser.save();
+/* booking */
+router.post("/book", userController.bookRoom);
 
-    res.json({ message: "User Registered Successfully" });
-
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-
-// User Login
-router.post("/login", async (req, res) => {
-
-  const { email, password } = req.body;
-
-  const user = await User.findOne({ email, password, role: "user" });
-
-  if (!user) {
-    return res.status(400).json({ message: "Invalid credentials" });
-  }
-
-  res.json({
-    message: "Login successful",
-    user
-  });
-});
+/* my bookings */
+router.get("/bookings/:email", userController.getMyBookings);
 
 module.exports = router;

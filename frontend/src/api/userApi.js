@@ -1,32 +1,50 @@
 import BASE_URL from "./base";
 
-export const registerUser = async (userData) => {
-  const res = await fetch(`${BASE_URL}/users/register`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(userData),
-  });
+/* ================= LOGIN ================= */
 
-  return res.json();
+export const loginUser = async (data) => {
+  const res = await API.post("/users/login", data);
+  return res.data;
 };
 
-export const loginUser = async (userData) => {
+/* ================= REGISTER ================= */
 
-  const res = await fetch("http://localhost:5000/api/users/login", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(userData),
-  });
+export const registerUser = async (data) => {
+  const res = await API.post("/users/register", data);
+  return res.data;
+};
 
-  const data = await res.json();
+/* ================= GET ROOMS ================= */
 
-  if (!res.ok) {
-    throw new Error(data.message);
-  }
+export const getRooms = async () => {
+  const res = await API.get("/users/rooms");
+  return res.data;
+};
 
-  return data;
+/* ================= BOOK ROOM ================= */
+
+export const bookRoom = async (data) => {
+  const res = await API.post("/booking/create", data);
+  return res.data;
+};
+
+/* ================= MY BOOKINGS ================= */
+
+export const getMyBookings = async () => {
+  const res = await API.get("/booking/my");
+  return res.data;
+};
+
+/* ================= PAYMENT ================= */
+
+export const makePayment = async (data) => {
+  const res = await API.post("/payment/pay", data);
+  return res.data;
+};
+
+/* ================= NOTIFICATIONS ================= */
+
+export const getNotifications = async () => {
+  const res = await API.get("/notification");
+  return res.data;
 };
