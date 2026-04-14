@@ -3,48 +3,82 @@ import BASE_URL from "./base";
 /* ================= LOGIN ================= */
 
 export const loginUser = async (data) => {
-  const res = await API.post("/users/login", data);
-  return res.data;
+  const res = await fetch(`${BASE_URL}/users/login`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  const result = await res.json();
+
+  if (!res.ok) {
+    throw new Error(result.message || "Login failed");
+  }
+
+  return result;
 };
 
 /* ================= REGISTER ================= */
 
 export const registerUser = async (data) => {
-  const res = await API.post("/users/register", data);
-  return res.data;
+  const res = await fetch(`${BASE_URL}/users/register`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  return res.json();
 };
 
 /* ================= GET ROOMS ================= */
 
 export const getRooms = async () => {
-  const res = await API.get("/users/rooms");
-  return res.data;
+  const res = await fetch(`${BASE_URL}/users/rooms`);
+  return res.json();
 };
 
 /* ================= BOOK ROOM ================= */
 
 export const bookRoom = async (data) => {
-  const res = await API.post("/booking/create", data);
-  return res.data;
+  const res = await fetch(`${BASE_URL}/booking/create`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  return res.json();
 };
 
 /* ================= MY BOOKINGS ================= */
 
 export const getMyBookings = async () => {
-  const res = await API.get("/booking/my");
-  return res.data;
+  const res = await fetch(`${BASE_URL}/booking/my`);
+  return res.json();
 };
 
 /* ================= PAYMENT ================= */
 
 export const makePayment = async (data) => {
-  const res = await API.post("/payment/pay", data);
-  return res.data;
+  const res = await fetch(`${BASE_URL}/payment/pay`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  return res.json();
 };
 
 /* ================= NOTIFICATIONS ================= */
 
 export const getNotifications = async () => {
-  const res = await API.get("/notification");
-  return res.data;
+  const res = await fetch(`${BASE_URL}/notification`);
+  return res.json();
 };

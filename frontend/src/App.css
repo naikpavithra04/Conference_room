@@ -28,6 +28,15 @@
 .App-link {
   color: #61dafb;
 }
+.btn-primary {
+  background: linear-gradient(45deg, #007bff, #00c6ff);
+  border: none;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  transition: 0.3s;
+}
 
 @keyframes App-logo-spin {
   from {

@@ -1,14 +1,23 @@
 const User = require("../models/User");
 const Room = require("../models/Room");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 const { JWT_SECRET } = require("../config/env");
 
 /* ================= REGISTER ================= */
+
+
 exports.register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    const user = new User({ name, email, password });
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = new User({
+      name,
+      email,
+      password: hashedPassword,
+    });
 
     await user.save();
 
@@ -22,16 +31,25 @@ exports.register = async (req, res) => {
 };
 
 /* ================= LOGIN ================= */
+
+
 exports.login = async (req, res) => {
+   console.log("LOGIN CONTROLLER HIT"); 
   try {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
 
-    if (!user) return res.json({ message: "User not found" });
+    if (!user) {
+      return res.status(400).json({ message: "User not found" });
+    }
 
-    if (user.password !== password)
-      return res.json({ message: "Wrong password" });
+    // ✅ FIX IS HERE
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      return res.status(400).json({ message: "Wrong password" });
+    }
 
     const token = jwt.sign(
       {
@@ -42,6 +60,7 @@ exports.login = async (req, res) => {
     );
 
     res.json({ token, user });
+
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

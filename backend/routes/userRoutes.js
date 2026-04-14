@@ -3,13 +3,20 @@ const router = express.Router();
 
 const userController = require("../controllers/userController");
 
-/* rooms */
+/* ================= LOGIN ================= */
+router.post("/login", userController.login);
+
+router.get("/test", (req, res) => {
+  console.log("TEST ROUTE WORKING");
+  res.send("User route working");
+});
+/* ================= ROOMS ================= */
 router.get("/rooms", userController.getRooms);
 
-/* booking */
+/* ================= BOOKING ================= */
 router.post("/book", userController.bookRoom);
 
-/* my bookings */
+/* ================= MY BOOKINGS ================= */
 router.get("/bookings/:email", userController.getMyBookings);
 
 module.exports = router;

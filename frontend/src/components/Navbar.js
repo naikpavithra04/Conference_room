@@ -7,29 +7,53 @@ const Navbar = () => {
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-3">
+
       <Link className="navbar-brand" to="/">
         Conference Booking
       </Link>
 
       <div className="ms-auto">
+
         {user ? (
           <>
-            <span className="text-white me-3">Welcome {user.name}</span>
-            <button className="btn btn-danger btn-sm" onClick={logout}>
+            <span className="text-white me-3">
+              Welcome {user.name}
+            </span>
+
+            <button
+              className="btn btn-danger btn-sm"
+              onClick={logout}
+            >
               Logout
             </button>
           </>
         ) : (
           <>
-            <Link className="btn btn-primary btn-sm me-2" to="/login">
-              Login
+            <Link
+              className="btn btn-primary btn-sm me-2"
+              to="/login/user"
+            >
+              User Login
             </Link>
-            <Link className="btn btn-success btn-sm" to="/register">
+
+            <Link
+              className="btn btn-warning btn-sm me-2"
+              to="/login/admin"
+            >
+              Admin Login
+            </Link>
+
+            <Link
+              className="btn btn-success btn-sm"
+              to="/register"
+            >
               Register
             </Link>
           </>
         )}
+
       </div>
+
     </nav>
   );
 };
