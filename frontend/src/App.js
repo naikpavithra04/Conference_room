@@ -22,12 +22,13 @@ function App() {
         <Route path="/navbar"element={<Navbar/>} />
 
         <Route path="/login/admin" element={<Adminlogin />} />
-        <Route path="/login/user" element={<Userlogin />} />
+
 
         {/* User */}
         
         <Route path="/user" element={<UserDashboard />} />
         <Route path="/rooms" element={<Rooms />} />
+        <Route path="/login/user" element={<Userlogin />} />
         <Route path="/mybookings" element={<MyBookings />} />
         <Route path="/register" element={<Register/>} />
         {/* Admin */}

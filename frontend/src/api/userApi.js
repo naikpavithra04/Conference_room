@@ -44,7 +44,7 @@ export const getRooms = async () => {
 /* ================= BOOK ROOM ================= */
 
 export const bookRoom = async (data) => {
-  const res = await fetch(`${BASE_URL}/booking/create`, {
+  const res = await fetch(`${BASE_URL}/users/book`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -57,11 +57,17 @@ export const bookRoom = async (data) => {
 
 /* ================= MY BOOKINGS ================= */
 
-export const getMyBookings = async () => {
-  const res = await fetch(`${BASE_URL}/booking/my`);
-  return res.json();
-};
+export const getMyBookings = async (email) => {
+  const res = await fetch(`${BASE_URL}/users/bookings/${email}`);
 
+  const result = await res.json();
+
+  if (!res.ok) {
+    throw new Error(result.message || "Failed to load bookings");
+  }
+
+  return result;
+};
 /* ================= PAYMENT ================= */
 
 export const makePayment = async (data) => {

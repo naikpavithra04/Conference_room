@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const Room = require("../models/Room");
+const Booking=require("../models/Booking");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { JWT_SECRET } = require("../config/env");
@@ -10,6 +11,15 @@ const { JWT_SECRET } = require("../config/env");
 exports.register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
+
+    // ✅ Check if user already exists
+    const existingUser = await User.findOne({ email });
+
+    if (existingUser) {
+      return res.status(400).json({
+        message: "User already registered with this email",
+      });
+    }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -25,6 +35,7 @@ exports.register = async (req, res) => {
       message: "User Registered",
       user,
     });
+
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -90,10 +101,12 @@ exports.getMyBookings = async (req, res) => {
   try {
     const { email } = req.params;
 
-    res.json({
-      message: "Bookings fetched",
-      email,
-    });
+    const bookings = await Booking
+      .find({ email })
+      .populate("roomId");
+
+    res.json(bookings); // ✅ MUST BE ARRAY
+
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

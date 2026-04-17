@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import BASE_URL from "../../api/base";
 
 const Reports = () => {
   const [report, setReport] = useState({});
@@ -9,8 +9,14 @@ const Reports = () => {
   }, []);
 
   const fetchReport = async () => {
-    const res = await axios.get("http://localhost:5000/api/reports");
-    setReport(res.data);
+    try {
+      const res = await fetch(`${BASE_URL}/admin/reports`);
+      const data = await res.json();
+      setReport(data);
+    } catch (err) {
+      
+      alert("Failed to load report");
+    }
   };
 
   return (
@@ -18,11 +24,9 @@ const Reports = () => {
       <h2>Reports</h2>
 
       <div className="mt-4">
-
-        <p>Total Bookings: {report.total}</p>
-        <p>Approved Bookings: {report.approved}</p>
-        <p>Pending Bookings: {report.pending}</p>
-
+        <p>Total Bookings: {report.total || 0}</p>
+        <p>Approved Bookings: {report.approved || 0}</p>
+        <p>Pending Bookings: {report.pending || 0}</p>
       </div>
     </div>
   );

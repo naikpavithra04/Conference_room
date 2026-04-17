@@ -7,9 +7,18 @@ const MyBookings = () => {
   const [bookings, setBookings] = useState([]);
 
   const loadBookings = async () => {
+  if (!email) {
+    alert("Please enter email");
+    return;
+  }
+
+  try {
     const data = await getMyBookings(email);
     setBookings(data);
-  };
+  } catch (err) {
+    alert(err.message);
+  }
+};
 
   return (
     <div className="container mt-5">
@@ -31,7 +40,7 @@ const MyBookings = () => {
 
       <div className="mt-4">
 
-        {bookings.map((b) => (
+        {Array.isArray(bookings) && bookings.map((b) => (
           <div key={b._id} className="card mt-2 p-3">
 
             <h5>Room {b.roomId.roomNumber}</h5>

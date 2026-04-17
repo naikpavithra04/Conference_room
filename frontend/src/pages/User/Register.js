@@ -17,7 +17,7 @@ const Register = () => {
     try {
       await registerUser(form);
       alert("Registered Successfully");
-      navigate("/login");
+      navigate("/login/user");
     } catch (error) {
       alert("Registration Failed");
     }
@@ -46,6 +46,9 @@ const Register = () => {
         />
         <button className="btn btn-success">Register</button>
       </form>
+      <p>
+  Already have an account? <a href="/login">Login</a>
+</p>
     </div>
   );
 };

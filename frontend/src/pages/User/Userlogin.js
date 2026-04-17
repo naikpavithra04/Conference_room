@@ -24,10 +24,10 @@ const UserLogin = () => {
       return;
     }
 
-    navigate("/user/dashboard");
+    navigate("/user");
 
   } catch (error) {
-    console.error("ERROR:", error.message);
+   
     alert(error.message); // ✅ show real error
   }
 };
@@ -57,6 +57,9 @@ const UserLogin = () => {
 
         <button className="btn btn-primary">User Login</button>
       </form>
+      <p>
+  Don't have an account? <a href="/register">Register</a>
+</p>
     </div>
   );
 };

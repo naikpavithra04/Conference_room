@@ -13,7 +13,7 @@ const UserDashboard = () => {
           View Rooms
         </Link>
 
-        <Link className="list-group-item" to="/my-bookings">
+        <Link className="list-group-item" to="/mybookings">
           My Bookings
         </Link>
 

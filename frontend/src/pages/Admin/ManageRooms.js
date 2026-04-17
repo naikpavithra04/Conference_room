@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import BASE_URL from "../../api/base";
 
 const ManageRooms = () => {
   const [rooms, setRooms] = useState([]);
@@ -9,8 +9,14 @@ const ManageRooms = () => {
   }, []);
 
   const fetchRooms = async () => {
-    const res = await axios.get("http://localhost:5000/api/rooms");
-    setRooms(res.data);
+    try {
+      const res = await fetch(`${BASE_URL}/rooms`);
+      const data = await res.json();
+      setRooms(data);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to load rooms");
+    }
   };
 
   return (
@@ -20,6 +26,7 @@ const ManageRooms = () => {
       <table className="table mt-4">
         <thead>
           <tr>
+            
             <th>Name</th>
             <th>Capacity</th>
             <th>Location</th>
@@ -28,14 +35,16 @@ const ManageRooms = () => {
         </thead>
 
         <tbody>
-          {rooms.map((room) => (
-            <tr key={room._id}>
-              <td>{room.name}</td>
-              <td>{room.capacity}</td>
-              <td>{room.location}</td>
-              <td>{room.price}</td>
-            </tr>
-          ))}
+          {Array.isArray(rooms) &&
+            rooms.map((room) => (
+              <tr key={room._id}>
+                <td>{room.name}</td>
+                <td>{room.capacity}</td>
+                <td>{room.location}</td>
+                <td>{room.price}</td>
+               
+              </tr>
+            ))}
         </tbody>
       </table>
     </div>

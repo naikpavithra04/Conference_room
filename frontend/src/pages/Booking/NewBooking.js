@@ -1,25 +1,42 @@
-import React from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import BookingForm from "../../components/BookingForm";
-import { createBooking } from "../../api/bookingApi";
+import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
+import { bookRoom } from "../../api/userApi";
 
 const NewBooking = () => {
-  const { roomId } = useParams();
-  const navigate = useNavigate();
+  const query = new URLSearchParams(useLocation().search);
+  const roomId = query.get("roomId");
 
-  const handleBookingSubmit = async (data) => {
-    const response = await createBooking(data);
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
 
-    if (response) {
-      alert("Booking Created Successfully");
-      navigate("/booking/history");
+  const handleBooking = async () => {
+    try {
+      await bookRoom({ roomId, date, time });
+      alert("Room booked successfully");
+    } catch (err) {
+      alert("Booking failed");
     }
   };
 
   return (
     <div className="container mt-5">
-      <h3>New Booking</h3>
-      <BookingForm roomId={roomId} onSubmit={handleBookingSubmit} />
+      <h3>Book Room</h3>
+
+      <input
+        type="date"
+        className="form-control mb-3"
+        onChange={(e) => setDate(e.target.value)}
+      />
+
+      <input
+        type="time"
+        className="form-control mb-3"
+        onChange={(e) => setTime(e.target.value)}
+      />
+
+      <button className="btn btn-success" onClick={handleBooking}>
+        Confirm Booking
+      </button>
     </div>
   );
 };
