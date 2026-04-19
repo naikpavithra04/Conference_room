@@ -3,6 +3,7 @@ import BASE_URL from "../../api/base";
 
 const ApproveBookings = () => {
   const [bookings, setBookings] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchBookings();
@@ -11,17 +12,24 @@ const ApproveBookings = () => {
   const fetchBookings = async () => {
     try {
       const res = await fetch(`${BASE_URL}/bookings`);
+
+      if (!res.ok) {
+        throw new Error("Failed to fetch bookings");
+      }
+
       const data = await res.json();
       setBookings(data);
     } catch (err) {
       console.error(err);
       alert("Failed to load bookings");
+    } finally {
+      setLoading(false);
     }
   };
 
   const approveBooking = async (id) => {
     try {
-      await fetch(`${BASE_URL}/admin/approve`, {
+      const res = await fetch(`${BASE_URL}/admin/approve`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -29,16 +37,25 @@ const ApproveBookings = () => {
         body: JSON.stringify({ id }),
       });
 
-      alert("Booking Approved");
-      fetchBookings(); // 🔥 refresh list
+      if (!res.ok) {
+        throw new Error("Approval failed");
+      }
+
+      // ✅ update UI without full reload
+      setBookings((prev) =>
+        prev.map((b) =>
+          b._id === id ? { ...b, status: "approved" } : b
+        )
+      );
     } catch (err) {
+      console.error(err);
       alert("Approval failed");
     }
   };
 
   const rejectBooking = async (id) => {
     try {
-      await fetch(`${BASE_URL}/admin/reject`, {
+      const res = await fetch(`${BASE_URL}/admin/reject`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -46,12 +63,26 @@ const ApproveBookings = () => {
         body: JSON.stringify({ id }),
       });
 
-      alert("Booking Rejected");
-      fetchBookings(); // 🔥 refresh list
+      if (!res.ok) {
+        throw new Error("Rejection failed");
+      }
+
+      // ✅ update UI without full reload
+      setBookings((prev) =>
+        prev.map((b) =>
+          b._id === id ? { ...b, status: "rejected" } : b
+        )
+      );
     } catch (err) {
+      console.error(err);
       alert("Rejection failed");
     }
   };
+
+  // ✅ loading state
+  if (loading) {
+    return <h3 className="text-center mt-5">Loading bookings...</h3>;
+  }
 
   return (
     <div className="container mt-5">
@@ -69,16 +100,39 @@ const ApproveBookings = () => {
         </thead>
 
         <tbody>
-          {Array.isArray(bookings) &&
+          {bookings.length === 0 ? (
+            <tr>
+              <td colSpan="5" className="text-center">
+                No bookings found
+              </td>
+            </tr>
+          ) : (
             bookings.map((b) => (
               <tr key={b._id}>
-                <td>{b.user?.name}</td>
-                <td>{b.room?.name}</td>
+                <td>{b.email}</td>
+                <td>{b.roomId}</td>
                 <td>{b.date}</td>
-                <td>{b.status}</td>
+
+                {/* ✅ colored status */}
                 <td>
+                  <span
+                    className={
+                      b.status === "approved"
+                        ? "text-success"
+                        : b.status === "rejected"
+                        ? "text-danger"
+                        : "text-warning"
+                    }
+                  >
+                    {b.status}
+                  </span>
+                </td>
+
+                <td>
+                  {/* ✅ disable if already processed */}
                   <button
                     className="btn btn-success me-2"
+                    disabled={b.status !== "pending"}
                     onClick={() => approveBooking(b._id)}
                   >
                     Approve
@@ -86,13 +140,15 @@ const ApproveBookings = () => {
 
                   <button
                     className="btn btn-danger"
+                    disabled={b.status !== "pending"}
                     onClick={() => rejectBooking(b._id)}
                   >
                     Reject
                   </button>
                 </td>
               </tr>
-            ))}
+            ))
+          )}
         </tbody>
       </table>
     </div>

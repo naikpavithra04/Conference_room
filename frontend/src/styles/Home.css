@@ -44,6 +44,10 @@
 .card-title {
   font-weight: 600;
 }
+.card:hover {
+  transform: translateY(-5px);
+  transition: 0.3s ease;
+}
 
 .card-text {
   color: #6c757d;

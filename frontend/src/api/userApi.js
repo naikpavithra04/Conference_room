@@ -58,7 +58,7 @@ export const bookRoom = async (data) => {
 /* ================= MY BOOKINGS ================= */
 
 export const getMyBookings = async (email) => {
-  const res = await fetch(`${BASE_URL}/users/bookings/${email}`);
+  const res = await fetch(`${BASE_URL}/bookings/my?email=${email}`);
 
   const result = await res.json();
 

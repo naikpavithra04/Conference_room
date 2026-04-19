@@ -13,13 +13,23 @@ const MyBookings = () => {
   }
 
   try {
+    console.log("Fetching bookings for:", email);
+
     const data = await getMyBookings(email);
+
+    console.log("API RESPONSE:", data);
+
+    if (!data) {
+      alert("No data returned from API");
+      return;
+    }
+
     setBookings(data);
   } catch (err) {
+    console.error("ERROR:", err);
     alert(err.message);
   }
 };
-
   return (
     <div className="container mt-5">
 
@@ -40,15 +50,18 @@ const MyBookings = () => {
 
       <div className="mt-4">
 
-        {Array.isArray(bookings) && bookings.map((b) => (
-          <div key={b._id} className="card mt-2 p-3">
-
-            <h5>Room {b.roomId.roomNumber}</h5>
-            <p>Date: {b.date}</p>
-            <p>Status: {b.status}</p>
-
-          </div>
-        ))}
+       {Array.isArray(bookings) && bookings.length > 0 ? (
+  bookings.map((b) => (
+    <div key={b._id} className="card mt-2 p-3">
+      <h5>Room {b.room?.roomNumber || "N/A"}</h5> {/* ✅ FIX */}
+      <p>Date: {b.date}</p>
+      <p>Time: {b.time}</p> {/* optional */}
+      <p>Status: {b.status}</p>
+    </div>
+  ))
+) : (
+  <p>No bookings found</p>
+)}
 
       </div>
 

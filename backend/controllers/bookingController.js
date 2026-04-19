@@ -2,10 +2,11 @@ const Booking = require("../models/Booking");
 
 exports.bookRoom = async (req, res) => {
   try {
-    const { roomId, date, time } = req.body;
+    console.log("BODY:", req.body);
 
-    // ❌ Check if already booked
-    const existing = await Booking.findOne({ roomId, date, time });
+    const { roomId, date, time, email } = req.body;
+
+    const existing = await Booking.findOne({ room: roomId, date, time }); // ✅ FIX
 
     if (existing) {
       return res.status(400).json({
@@ -14,17 +15,33 @@ exports.bookRoom = async (req, res) => {
     }
 
     const booking = new Booking({
-      roomId,
+      room: roomId,   // ✅ FIX (was roomId)
       date,
       time,
+      email,
     });
 
-    await booking.save();
+    const saved = await booking.save();
 
-    res.json({ message: "Room booked successfully", booking });
+    console.log("SAVED:", saved);
+
+    res.json({ message: "Room booked successfully", booking: saved });
 
   } catch (error) {
     console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.getMyBookings = async (req, res) => {
+  try {
+    const { email } = req.query;
+
+    const bookings = await Booking.find({ email })
+      .populate("room"); // ✅ FIX (was roomId)
+
+    res.json(bookings);
+  } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };

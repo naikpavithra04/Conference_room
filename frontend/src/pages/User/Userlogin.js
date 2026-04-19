@@ -44,7 +44,7 @@ const UserLogin = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-        />
+        /><br></br>
 
         <input
           type="password"
@@ -53,7 +53,7 @@ const UserLogin = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-        />
+        /><br></br>
 
         <button className="btn btn-primary">User Login</button>
       </form>

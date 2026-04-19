@@ -18,6 +18,9 @@ app.use("/api/notifications", require("./routes/notificationRoutes"));
 app.use("/api/rooms", require("./routes/roomRoutes"));
 
 app.use(errorHandler);
+app.get("/test-admin", (req, res) => {
+  res.send("Admin route working");
+});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log("Server running on " + PORT));

@@ -44,7 +44,7 @@ console.log("FORM SUBMITTED"); // 👈 ADD THIS
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-        />
+        /><br></br>
 
         <input
           type="password"
@@ -53,7 +53,7 @@ console.log("FORM SUBMITTED"); // 👈 ADD THIS
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-        />
+        /><br></br>
 
         <button className="btn btn-danger">Admin Login</button>
       </form>
