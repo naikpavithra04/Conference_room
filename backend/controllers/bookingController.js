@@ -6,7 +6,11 @@ exports.bookRoom = async (req, res) => {
 
     const { roomId, date, time, email } = req.body;
 
-    const existing = await Booking.findOne({ room: roomId, date, time }); // ✅ FIX
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+
+    const existing = await Booking.findOne({ room: roomId, date, time });
 
     if (existing) {
       return res.status(400).json({
@@ -15,7 +19,7 @@ exports.bookRoom = async (req, res) => {
     }
 
     const booking = new Booking({
-      room: roomId,   // ✅ FIX (was roomId)
+      room: roomId,
       date,
       time,
       email,
@@ -37,8 +41,7 @@ exports.getMyBookings = async (req, res) => {
   try {
     const { email } = req.query;
 
-    const bookings = await Booking.find({ email })
-      .populate("room"); // ✅ FIX (was roomId)
+    const bookings = await Booking.find({ email }).populate("room");
 
     res.json(bookings);
   } catch (error) {

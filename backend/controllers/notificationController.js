@@ -1,6 +1,15 @@
 const Notification = require("../models/Notification");
 
-exports.sendNotification = async (req, res) => {
-  const note = await Notification.create(req.body);
-  res.json(note);
+// Create notification
+exports.createNotification = async (email, message) => {
+  await Notification.create({ email, message });
+};
+
+// Get notifications
+exports.getNotifications = async (req, res) => {
+  const { email } = req.query;
+
+  const data = await Notification.find({ email }).sort({ createdAt: -1 });
+
+  res.json(data);
 };

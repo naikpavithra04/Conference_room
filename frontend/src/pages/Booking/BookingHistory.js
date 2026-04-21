@@ -23,7 +23,7 @@ const BookingHistory = () => {
         <div key={booking._id} className="card mb-3">
           <div className="card-body">
             <p>Date: {booking.date}</p>
-            <p>Time: {booking.timeSlot}</p>
+            <p>Time: {booking.time}</p>
             <p>Status: {booking.status}</p>
 
             <button
