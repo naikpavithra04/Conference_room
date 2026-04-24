@@ -45,7 +45,9 @@ const BookingForm = ({ roomId, onSubmit }) => {
       </div>
 
       <button className="btn btn-success">Confirm Booking</button>
+    
     </form>
+  
   );
 };
 

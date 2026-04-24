@@ -1,30 +1,50 @@
-import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { createBooking } from "../../api/bookingApi";
 
 const NewBooking = () => {
   const query = new URLSearchParams(useLocation().search);
   const roomId = query.get("roomId");
 
+  const navigate = useNavigate();
+
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
-  const [email, setEmail] = useState(""); // ✅ added
+  const [user, setUser] = useState(null);
+
+  // ✅ Get logged-in user from localStorage
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+
+    if (!storedUser) {
+      alert("Please login first");
+      navigate("/login");
+    } else {
+      setUser(storedUser);
+    }
+  }, [navigate]);
 
   const handleBooking = async () => {
+    if (!user) {
+      alert("Unauthorized user");
+      return;
+    }
+
     try {
       const res = await createBooking({
         roomId,
         date,
         time,
-        email, // ✅ important
+        email: user.email, // ✅ always from logged-in user
+        userId: user._id,  // optional but better
       });
 
       if (res.message === "Room booked successfully") {
         alert("Room booked successfully");
+        navigate("/user");
       } else {
         alert(res.message);
       }
-
     } catch (err) {
       console.error(err);
       alert("Booking failed");
@@ -35,13 +55,13 @@ const NewBooking = () => {
     <div className="container mt-5">
       <h3>Book Room</h3>
 
-      {/* ✅ Email input */}
-      <input
+      {/* ✅ Show logged-in email (not editable) */}
+      {/*<input
         type="email"
         className="form-control mb-3"
-        placeholder="Enter Email"
-        onChange={(e) => setEmail(e.target.value)}
-      />
+        value={user?.email || ""}
+        disabled
+      />*/}
 
       <input
         type="date"

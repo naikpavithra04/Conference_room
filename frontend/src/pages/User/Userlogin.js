@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { loginUser } from "../../api/userApi";
 
 const UserLogin = () => {
@@ -8,29 +8,34 @@ const UserLogin = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  try {
-    const data = await loginUser({ email, password });
-    console.log("DATA:", data);
+    try {
+      const data = await loginUser({ email, password });
+      console.log("DATA:", data);
 
-    if (!data.user) {
-      alert("Invalid credentials");
-      return;
+      if (!data.user) {
+        alert("Invalid credentials");
+        return;
+      }
+
+      if (data.user.role !== "user") {
+        alert("Access denied! Not a user");
+        return;
+      }
+
+      // ✅ Store login info (IMPORTANT for logout later)
+      localStorage.setItem("user", JSON.stringify(data.user));
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+      }
+
+      navigate("/user");
+
+    } catch (error) {
+      alert(error.message);
     }
-
-    if (data.user.role !== "user") {
-      alert("Access denied! Not a user");
-      return;
-    }
-
-    navigate("/user");
-
-  } catch (error) {
-   
-    alert(error.message); // ✅ show real error
-  }
-};
+  };
 
   return (
     <div className="container mt-5">
@@ -44,7 +49,7 @@ const UserLogin = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-        /><br></br>
+        /><br />
 
         <input
           type="password"
@@ -53,13 +58,20 @@ const UserLogin = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-        /><br></br>
+        /><br />
 
         <button className="btn btn-primary">User Login</button>
       </form>
+
+      {/* ✅ Register */}
       <p>
-  Don't have an account? <a href="/register">Register</a>
-</p>
+        Don't have an account? <Link to="/register">Register</Link>
+      </p>
+
+      {/* ✅ Forgot Password */}
+      <p>
+        <Link to="/forgot-password">Forgot Password?</Link>
+      </p>
     </div>
   );
 };

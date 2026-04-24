@@ -1,15 +1,16 @@
 const router = require("express").Router();
 const Booking = require("../models/Booking");
-const { bookRoom, getMyBookings } = require("../controllers/bookingController");
+const { authMiddleware } = require("../middleware/authMiddleware");
+const bookingController = require("../controllers/bookingController");
 
-// ✅ Create booking
-router.post("/", bookRoom);
+// ✅ Create booking (protected)
+router.post("/book", authMiddleware, bookingController.bookRoom);
 
 // ✅ Get ALL bookings (Admin)
 router.get("/", async (req, res) => {
   try {
     const bookings = await Booking.find()
-      .populate("user room") // ✅ already correct
+      .populate("user room")
       .sort({ createdAt: -1 });
 
     res.json(bookings);
@@ -20,6 +21,6 @@ router.get("/", async (req, res) => {
 });
 
 // ✅ Get logged-in user's bookings
-router.get("/my", getMyBookings);
+router.get("/my", authMiddleware, bookingController.getMyBookings);
 
 module.exports = router;

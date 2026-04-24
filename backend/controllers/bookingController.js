@@ -1,14 +1,12 @@
 const Booking = require("../models/Booking");
 
+// ✅ Book a room
 exports.bookRoom = async (req, res) => {
   try {
-    console.log("BODY:", req.body);
+    const { roomId, date, time } = req.body;
 
-    const { roomId, date, time, email } = req.body;
-
-    if (!email) {
-      return res.status(400).json({ message: "Email is required" });
-    }
+    const userEmail = req.user.email;
+    const userId = req.user.id;
 
     const existing = await Booking.findOne({ room: roomId, date, time });
 
@@ -22,12 +20,11 @@ exports.bookRoom = async (req, res) => {
       room: roomId,
       date,
       time,
-      email,
+      email: userEmail,
+      user: userId,
     });
 
     const saved = await booking.save();
-
-    console.log("SAVED:", saved);
 
     res.json({ message: "Room booked successfully", booking: saved });
 
@@ -37,14 +34,16 @@ exports.bookRoom = async (req, res) => {
   }
 };
 
+// ✅ Get logged-in user's bookings
 exports.getMyBookings = async (req, res) => {
   try {
-    const { email } = req.query;
-
-    const bookings = await Booking.find({ email }).populate("room");
+    const bookings = await Booking.find({ user: req.user.id })
+      .populate("room")
+      .sort({ createdAt: -1 });
 
     res.json(bookings);
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: error.message });
   }
 };

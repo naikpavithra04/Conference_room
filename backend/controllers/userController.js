@@ -99,14 +99,11 @@ exports.bookRoom = async (req, res) => {
 /* ================= GET MY BOOKINGS ================= */
 exports.getMyBookings = async (req, res) => {
   try {
-    const { email } = req.params;
-
     const bookings = await Booking
-      .find({ email })
-      .populate("roomId");
+      .find({ email: req.user.email }) // ✅ secure
+      .populate("room");
 
-    res.json(bookings); // ✅ MUST BE ARRAY
-
+    res.json(bookings);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
