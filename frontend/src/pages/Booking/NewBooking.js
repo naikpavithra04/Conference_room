@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { createBooking } from "../../api/bookingApi";
+import PaymentModal from "../../components/PaymentModal";
 
 const NewBooking = () => {
   const query = new URLSearchParams(useLocation().search);
@@ -12,7 +13,10 @@ const NewBooking = () => {
   const [time, setTime] = useState("");
   const [user, setUser] = useState(null);
 
-  // ✅ Get logged-in user from localStorage
+  // ✅ NEW: control payment modal
+  const [showPayment, setShowPayment] = useState(false);
+
+  // ✅ Get logged-in user
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
 
@@ -24,7 +28,9 @@ const NewBooking = () => {
     }
   }, [navigate]);
 
-  const handleBooking = async () => {
+  // ❌ OLD: removed direct booking from button
+  // ✅ NEW: booking only happens AFTER payment success
+  const handleBookingAfterPayment = async () => {
     if (!user) {
       alert("Unauthorized user");
       return;
@@ -35,12 +41,13 @@ const NewBooking = () => {
         roomId,
         date,
         time,
-        email: user.email, // ✅ always from logged-in user
-        userId: user._id,  // optional but better
+        email: user.email,
+        userId: user._id,
+        paymentStatus: "paid", // ✅ optional but good
       });
 
       if (res.message === "Room booked successfully") {
-        alert("Room booked successfully");
+        alert("Booking Confirmed 🎉");
         navigate("/user");
       } else {
         alert(res.message);
@@ -55,14 +62,6 @@ const NewBooking = () => {
     <div className="container mt-5">
       <h3>Book Room</h3>
 
-      {/* ✅ Show logged-in email (not editable) */}
-      {/*<input
-        type="email"
-        className="form-control mb-3"
-        value={user?.email || ""}
-        disabled
-      />*/}
-
       <input
         type="date"
         className="form-control mb-3"
@@ -75,9 +74,30 @@ const NewBooking = () => {
         onChange={(e) => setTime(e.target.value)}
       />
 
-      <button className="btn btn-success" onClick={handleBooking}>
-        Confirm Booking
+      {/* ✅ CHANGED BUTTON */}
+      <button
+        className="btn btn-success"
+        onClick={() => {
+          if (!date || !time) {
+            alert("Please select date and time");
+            return;
+          }
+          setShowPayment(true); // 👉 open payment modal
+        }}
+      >
+        Proceed to Payment
       </button>
+
+      {/* ✅ PAYMENT MODAL */}
+      {showPayment && (
+        <PaymentModal
+          onClose={() => setShowPayment(false)}
+          onSuccess={() => {
+            setShowPayment(false);
+            handleBookingAfterPayment(); // 👉 book after payment
+          }}
+        />
+      )}
     </div>
   );
 };
