@@ -1,42 +1,41 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { Home, BedDouble, ClipboardList } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import "../../styles/Dashboard.css";
 
 const UserDashboard = () => {
-  const cards = [
-    {
-      title: "View Rooms",
-      icon: <BedDouble className="w-6 h-6" />,
-      link: "/rooms",
-    },
-    {
-      title: "My Bookings",
-      icon: <ClipboardList className="w-6 h-6" />,
-      link: "/mybookings",
-    },
-  ];
+  const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <div className="max-w-5xl mx-auto">
-        <h2 className="text-3xl font-bold mb-6 flex items-center gap-2">
-          <Home /> User Dashboard
-        </h2>
+    <div className="dashboard">
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {cards.map((card, index) => (
-            <Link
-              key={index}
-              to={card.link}
-              className="bg-white p-6 rounded-2xl shadow hover:shadow-lg transition duration-300 flex items-center gap-4"
-            >
-              <div className="bg-green-100 text-green-600 p-3 rounded-xl">
-                {card.icon}
-              </div>
-              <span className="text-lg font-medium">{card.title}</span>
-            </Link>
-          ))}
+      {/* Main Content */}
+      <div className="main full">
+
+        {/* Topbar with Navigation */}
+        <div className="topbar">
+          <h2 className="logo-text">CRB</h2>
+
+          <div className="top-nav">
+            <span onClick={() => navigate("/home")}>Home</span>
+            <span onClick={() => navigate("/about")}>About</span>
+            <span onClick={() => navigate("/rooms")}>Rooms</span>
+            <span onClick={() => navigate("/mybookings")}>Room Bookings</span>
+          </div>
+
+          <button className="logout">Logout</button>
         </div>
+
+        {/* Hero Section */}
+        <div className="hero">
+          <div className="glass-card">
+            <h1>Luxury Meeting Rooms</h1>
+            <p>Book high-end spaces for your professional meetings</p>
+            <button onClick={() => navigate("/rooms")}>
+              Explore Rooms
+            </button>
+          </div>
+        </div>
+
       </div>
     </div>
   );

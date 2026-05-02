@@ -1,97 +1,103 @@
 import React from "react";
-// import { Link } from "react-router-dom"; // keep only if you use it
+import { useNavigate } from "react-router-dom";
+import "../styles/Home.css";
 
-export default function Home() {
+const Home = () => {
+  const navigate = useNavigate();
+
   return (
-    <div className="bg-gray-100 min-h-screen">
+    <div className="home">
 
-      {/* Navbar */}
-      <header className="flex justify-between items-center px-10 py-4 bg-white shadow">
-        <h1 className="text-xl font-bold">📅 Conference Room Booking</h1>
-        <div className="space-x-3">
-          <button className="border border-purple-600 text-purple-600 px-4 py-2 rounded-lg">
-            User Login
-          </button>
-          <button className="bg-purple-600 text-white px-4 py-2 rounded-lg">
-            Admin Login
-          </button>
+      {/* HERO */}
+      <section className="hero">
+        <div className="hero-glass">
+          <h1>Conference Room Booking</h1>
+          <p>Smart, seamless, and modern way to reserve meeting spaces</p>
+
+          <div className="hero-buttons">
+            <button onClick={() => navigate("/rooms")}>
+              Explore Rooms
+            </button>
+            <button className="secondary" onClick={() => navigate("/login/user")}>
+              Get Started
+            </button>
+          </div>
         </div>
-      </header>
-
-      {/* Hero Section */}
-      <section className="flex flex-col md:flex-row items-center justify-between px-10 py-16">
-        <div>
-          <h2 className="text-4xl font-bold mb-4">
-            Welcome to <br /> Conference Room Booking
-          </h2>
-          <p className="text-gray-600">
-            Easily book and manage your meeting rooms with just a few clicks.
-          </p>
-        </div>
-
-        <div className="relative w-full max-w-md mt-6 md:mt-0">
-  <img
-    src="https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg"
-    alt="Conference Room"
-    className="w-full h-auto object-cover rounded-2xl"
-  />
-  <div className="absolute inset-0 bg-black/20 rounded-2xl hover:bg-black/10 transition"></div>
-</div>
       </section>
 
-      {/* Features */}
-      <section className="grid md:grid-cols-3 gap-6 px-10">
-        <FeatureCard
-          icon="📂"
-          title="View Rooms"
-          desc="Explore all available conference rooms with details."
-          button="View Rooms"
-        />
-        <FeatureCard
-          icon="📅"
-          title="Book Easily"
-          desc="Reserve rooms quickly for your meetings and events."
-          button="Book a Room"
-        />
-        <FeatureCard
-          icon="⏱"
-          title="Booking History"
-          desc="Track all your past and upcoming bookings."
-          button="View History"
-        />
+      {/* FEATURES */}
+      <section className="features">
+        <h2>Why Choose Our Platform</h2>
+
+        <div className="feature-grid">
+          <div className="feature-card">
+            <span>📅</span>
+            <h3>Instant Booking</h3>
+            <p>Book rooms in seconds with real-time availability.</p>
+          </div>
+
+          <div className="feature-card">
+            <span>🏢</span>
+            <h3>Multiple Spaces</h3>
+            <p>Conference rooms, training halls & meeting rooms.</p>
+          </div>
+
+          <div className="feature-card">
+            <span>⚡</span>
+            <h3>Fast & Reliable</h3>
+            <p>Optimized system for quick and smooth booking.</p>
+          </div>
+
+          <div className="feature-card">
+            <span>🔐</span>
+            <h3>Secure Access</h3>
+            <p>Protected login and safe reservation system.</p>
+          </div>
+        </div>
       </section>
 
-      {/* Help Section */}
-      <section className="mx-10 my-10 bg-purple-100 p-6 rounded-xl flex justify-between items-center">
-        <div>
-          <h3 className="font-bold text-lg">Need Help?</h3>
-          <p className="text-gray-600">
-            Contact the administrator for any assistance.
-          </p>
+      {/* HOW IT WORKS */}
+      <section className="steps">
+        <h2>How It Works</h2>
+
+        <div className="steps-grid">
+          <div className="step-card">
+            <h3>1</h3>
+            <p>Login or Register</p>
+          </div>
+
+          <div className="step-card">
+            <h3>2</h3>
+            <p>Select Room</p>
+          </div>
+
+          <div className="step-card">
+            <h3>3</h3>
+            <p>Choose Date & Time</p>
+          </div>
+
+          <div className="step-card">
+            <h3>4</h3>
+            <p>Confirm Booking</p>
+          </div>
         </div>
-        <button className="border border-purple-600 text-purple-600 px-4 py-2 rounded-lg">
-          Contact Admin
+      </section>
+
+      {/* CTA */}
+      <section className="cta">
+        <h2>Ready to Book Your Space?</h2>
+        <button onClick={() => navigate("/rooms")}>
+          Get Started Now
         </button>
       </section>
 
-      {/* Footer */}
-      <footer className="text-center py-6 text-gray-500">
-        © 2026 Conference Room Booking System. All rights reserved.
+      {/* FOOTER */}
+      <footer className="footer">
+        <p>© 2026 Conference Room Booking</p>
       </footer>
 
     </div>
   );
-}
+};
 
-function FeatureCard({ icon, title, desc, button }) {
-  return (
-    <div className="bg-white p-6 rounded-2xl shadow text-center">
-      <div className="text-4xl mb-3">{icon}</div>
-      <h3 className="text-xl font-semibold mb-2">{title}</h3>
-      <p className="text-gray-600 mb-4">{desc}</p>
-      <button className="bg-purple-600 text-white px-4 py-2 rounded-lg">
-        {button} →
-      </button>
-    </div>
-  );
-}
+export default Home;

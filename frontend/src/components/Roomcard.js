@@ -1,4 +1,4 @@
-/*import React from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 
 const RoomCard = ({ room }) => {
@@ -23,4 +23,4 @@ const RoomCard = ({ room }) => {
   );
 };
 
-export default RoomCard;*/
+export default RoomCard;

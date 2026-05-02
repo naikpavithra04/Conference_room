@@ -5,21 +5,27 @@ const ResetPassword = () => {
   const { token } = useParams();
   const [password, setPassword] = useState("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+ const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    try {
-      await fetch(`/api/reset-password/${token}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password }),
-      });
+  try {
+    const res = await fetch(`/api/reset-password/${token}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password }),
+    });
 
-      alert("Password updated successfully");
-    } catch (err) {
-      alert("Error resetting password");
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.message || "Reset failed");
     }
-  };
+
+    alert("Password updated successfully");
+  } catch (err) {
+    alert(err.message);
+  }
+};
 
   return (
     <div>

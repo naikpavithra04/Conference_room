@@ -36,12 +36,12 @@ const Navbar = () => {
               User Login
             </Link>
 
-            <Link
+            {/*<Link
               className="btn btn-warning btn-sm me-2"
               to="/login/admin"
             >
               Admin Login
-            </Link>
+            </Link>*/}
 
             <Link
               className="btn btn-success btn-sm"
