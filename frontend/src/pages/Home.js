@@ -9,18 +9,31 @@ const Home = () => {
     <div className="home">
 
       {/* HERO */}
-      <section className="hero">
-        <div className="hero-glass">
-          <h1>Conference Room Booking</h1>
-          <p>Smart, seamless, and modern way to reserve meeting spaces</p>
+      <section
+  className="home-hero"
+  style={{
+    backgroundImage:
+      "url('https://images.unsplash.com/photo-1492724441997-5dc865305da7')",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  }}
+>
+        <div className="home-overlay">
+          <div className="hero-content">
+            <h1>Conference Room Booking</h1>
+            <p>Smart, seamless, and modern way to reserve meeting spaces</p>
 
-          <div className="hero-buttons">
-            <button onClick={() => navigate("/rooms")}>
-              Explore Rooms
-            </button>
-            <button className="secondary" onClick={() => navigate("/login/user")}>
-              Get Started
-            </button>
+            <div className="hero-buttons">
+              <button onClick={() => navigate("/rooms")}>
+                Explore Rooms
+              </button>
+              <button
+                className="secondary"
+                onClick={() => navigate("/login/user")}
+              >
+                Get Started
+              </button>
+            </div>
           </div>
         </div>
       </section>

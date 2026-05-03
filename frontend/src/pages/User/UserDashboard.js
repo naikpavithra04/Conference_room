@@ -26,7 +26,7 @@ const UserDashboard = () => {
         </div>
 
         {/* Hero Section */}
-        <div className="hero">
+        <div className="dashboard-hero">
           <div className="glass-card">
             <h1>Luxury Meeting Rooms</h1>
             <p>Book high-end spaces for your professional meetings</p>

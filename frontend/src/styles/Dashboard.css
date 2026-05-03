@@ -84,7 +84,7 @@
 }
 
 /* Hero */
-.hero {
+.dashboard-hero {
   flex: 1;
   background: url("https://images.unsplash.com/photo-1600585154340-be6161a56a0c")
     no-repeat center center/cover;

@@ -1,20 +1,8 @@
-/*body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-     background-color: #f8f9fa;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}*/
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* GLOBAL RESET */
 * {
   margin: 0;
   padding: 0;
@@ -22,76 +10,66 @@ code {
   font-family: "Poppins", sans-serif;
 }
 
-.hero {
+/* INDEX HERO */
+.index-hero {
   height: 100vh;
-  background: url("https://images.unsplash.com/photo-1590650046871-92c887180603")
-    no-repeat center center/cover;
+  background: url("https://images.unsplash.com/photo-1504384308090-c894fdcc538d")
+   no-repeat center/cover;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.overlay {
+/* UNIQUE OVERLAY (INDEX ONLY) */
+.index-overlay {
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.6); /* dark overlay */
+  background: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.content {
+/* CONTENT */
+.index-content {
   text-align: center;
   color: white;
 }
 
-.content h1 {
+.index-content h1 {
   font-size: 3rem;
   margin-bottom: 10px;
 }
 
-.content p {
+.index-content p {
   font-size: 1.2rem;
   margin-bottom: 30px;
-  opacity: 0.9;
 }
 
-.buttons {
+/* BUTTONS */
+.index-buttons {
   display: flex;
   justify-content: center;
   gap: 20px;
 }
 
-.btn {
+.index-btn {
   padding: 12px 30px;
-  font-size: 16px;
-  border: none;
   border-radius: 25px;
   cursor: pointer;
-  transition: all 0.3s ease;
 }
 
-.btn:hover {
-  transform: scale(1.05);
-}
-
-.login {
+.index-login {
   background: white;
   color: black;
 }
 
-.login:hover {
-  background: #ddd;
-}
-
-.register {
+.index-register {
   background: #4cafef;
   color: white;
 }
 
-.register:hover {
-  background: #2196f3;
-}
+/* NAVBAR FIX */
 .navbar {
   position: relative;
   z-index: 1000;
