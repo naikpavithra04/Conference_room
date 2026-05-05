@@ -1,9 +1,13 @@
 const mongoose = require("mongoose");
 
-const roomSchema = new mongoose.Schema({
-  roomNumber: String,
-  type: String,
-  price: Number,
-});
+const roomSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    capacity: { type: Number, required: true },
+    location: { type: String, required: true },
+    price: { type: Number, required: true }
+  },
+  { timestamps: true }
+);
 
 module.exports = mongoose.model("Room", roomSchema);

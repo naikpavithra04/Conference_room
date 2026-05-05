@@ -12,15 +12,9 @@ const ApproveBookings = () => {
   const fetchBookings = async () => {
     try {
       const res = await fetch(`${BASE_URL}/bookings`);
-
-      if (!res.ok) {
-        throw new Error("Failed to fetch bookings");
-      }
-
       const data = await res.json();
       setBookings(data);
     } catch (err) {
-      console.error(err);
       alert("Failed to load bookings");
     } finally {
       setLoading(false);
@@ -29,130 +23,199 @@ const ApproveBookings = () => {
 
   const approveBooking = async (id) => {
     try {
-      const res = await fetch(`${BASE_URL}/admin/approve`, {
+      await fetch(`${BASE_URL}/admin/approve`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id })
       });
 
-      if (!res.ok) {
-        throw new Error("Approval failed");
-      }
-
-      // ✅ update UI without full reload
       setBookings((prev) =>
         prev.map((b) =>
           b._id === id ? { ...b, status: "approved" } : b
         )
       );
-    } catch (err) {
-      console.error(err);
+    } catch {
       alert("Approval failed");
     }
   };
 
   const rejectBooking = async (id) => {
     try {
-      const res = await fetch(`${BASE_URL}/admin/reject`, {
+      await fetch(`${BASE_URL}/admin/reject`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id })
       });
 
-      if (!res.ok) {
-        throw new Error("Rejection failed");
-      }
-
-      // ✅ update UI without full reload
       setBookings((prev) =>
         prev.map((b) =>
           b._id === id ? { ...b, status: "rejected" } : b
         )
       );
-    } catch (err) {
-      console.error(err);
+    } catch {
       alert("Rejection failed");
     }
   };
 
-  // ✅ loading state
   if (loading) {
-    return <h3 className="text-center mt-5">Loading bookings...</h3>;
+    return (
+      <div style={styles.loader}>
+        Loading bookings...
+      </div>
+    );
   }
 
   return (
-    <div className="container mt-5">
-      <h2>Approve Bookings</h2>
+    <div style={styles.page}>
+      <h2 style={styles.title}>📋 Approve Bookings</h2>
 
-      <table className="table mt-4">
-        <thead>
-          <tr>
-            <th>User</th>
-            <th>Room</th>
-            <th>Date</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {bookings.length === 0 ? (
+      <div style={styles.card}>
+        <table style={styles.table}>
+          <thead>
             <tr>
-              <td colSpan="5" className="text-center">
-                No bookings found
-              </td>
+              <th style={styles.th}>User</th>
+              <th style={styles.th}>Room</th>
+              <th style={styles.th}>Date</th>
+              <th style={styles.th}>Status</th>
+              <th style={styles.th}>Action</th>
             </tr>
-          ) : (
-            bookings.map((b) => (
-              <tr key={b._id}>
-                <td>{b.email}</td>
-                <td>{b.roomId}</td>
-                <td>{b.date}</td>
+          </thead>
 
-                {/* ✅ colored status */}
-                <td>
-                  <span
-                    className={
-                      b.status === "approved"
-                        ? "text-success"
-                        : b.status === "rejected"
-                        ? "text-danger"
-                        : "text-warning"
-                    }
-                  >
-                    {b.status}
-                  </span>
-                </td>
-
-                <td>
-                  {/* ✅ disable if already processed */}
-                  <button
-                    className="btn btn-success me-2"
-                    disabled={b.status !== "pending"}
-                    onClick={() => approveBooking(b._id)}
-                  >
-                    Approve
-                  </button>
-
-                  <button
-                    className="btn btn-danger"
-                    disabled={b.status !== "pending"}
-                    onClick={() => rejectBooking(b._id)}
-                  >
-                    Reject
-                  </button>
+          <tbody>
+            {bookings.length === 0 ? (
+              <tr>
+                <td colSpan="5" style={styles.empty}>
+                  No bookings found
                 </td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            ) : (
+              bookings.map((b) => (
+                <tr key={b._id} style={styles.row}>
+                  <td style={styles.td}>{b.email}</td>
+                  <td style={styles.td}>{b.roomId}</td>
+                  <td style={styles.td}>
+                    {new Date(b.date).toLocaleDateString()}
+                  </td>
+
+                  <td style={styles.td}>
+                    <span style={getStatusStyle(b.status)}>
+                      {b.status}
+                    </span>
+                  </td>
+
+                  <td style={styles.td}>
+                    <button
+                      style={{
+                        ...styles.btn,
+                        ...styles.approveBtn,
+                        opacity: b.status !== "pending" ? 0.5 : 1
+                      }}
+                      disabled={b.status !== "pending"}
+                      onClick={() => approveBooking(b._id)}
+                    >
+                      Approve
+                    </button>
+
+                    <button
+                      style={{
+                        ...styles.btn,
+                        ...styles.rejectBtn,
+                        marginLeft: "8px",
+                        opacity: b.status !== "pending" ? 0.5 : 1
+                      }}
+                      disabled={b.status !== "pending"}
+                      onClick={() => rejectBooking(b._id)}
+                    >
+                      Reject
+                    </button>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
 
 export default ApproveBookings;
+
+/* ---------- STYLES ---------- */
+
+const styles = {
+  page: {
+    padding: "30px",
+    background: "#f4f6f8",
+    minHeight: "100vh",
+    fontFamily: "Arial"
+  },
+  title: {
+    fontSize: "28px",
+    fontWeight: "bold",
+    marginBottom: "20px",
+    color: "#111"
+  },
+  card: {
+    background: "#fff",
+    borderRadius: "12px",
+    padding: "20px",
+    boxShadow: "0 4px 15px rgba(0,0,0,0.08)"
+  },
+  table: {
+    width: "100%",
+    borderCollapse: "collapse"
+  },
+  th: {
+    textAlign: "left",
+    padding: "12px",
+    borderBottom: "1px solid #eee",
+    color: "#555"
+  },
+  td: {
+    padding: "12px",
+    borderBottom: "1px solid #f1f1f1"
+  },
+  row: {
+    transition: "0.2s"
+  },
+  btn: {
+    padding: "6px 10px",
+    borderRadius: "6px",
+    border: "none",
+    cursor: "pointer",
+    fontSize: "13px"
+  },
+  approveBtn: {
+    background: "#16a34a",
+    color: "#fff"
+  },
+  rejectBtn: {
+    background: "#dc2626",
+    color: "#fff"
+  },
+  empty: {
+    textAlign: "center",
+    padding: "20px",
+    color: "#888"
+  },
+  loader: {
+    textAlign: "center",
+    marginTop: "50px",
+    fontSize: "18px"
+  }
+};
+
+/* dynamic status style */
+const getStatusStyle = (status) => ({
+  padding: "4px 10px",
+  borderRadius: "20px",
+  fontSize: "12px",
+  color: "#fff",
+  background:
+    status === "approved"
+      ? "#16a34a"
+      : status === "rejected"
+      ? "#dc2626"
+      : "#f59e0b"
+});

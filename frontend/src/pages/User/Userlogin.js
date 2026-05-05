@@ -1,18 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { loginUser } from "../../api/userApi";
+import "../../styles/Auth.css";
 
 const UserLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
   const navigate = useNavigate();
+
+  // ✅ Clear fields when page loads
+  useEffect(() => {
+    setEmail("");
+    setPassword("");
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       const data = await loginUser({ email, password });
-      console.log("DATA:", data);
 
       if (!data.user) {
         alert("Invalid credentials");
@@ -20,58 +28,76 @@ const UserLogin = () => {
       }
 
       if (data.user.role !== "user") {
-        alert("Access denied! Not a user");
+        alert("Access denied!");
         return;
       }
 
-      // ✅ Store login info (IMPORTANT for logout later)
+      // Store login info
       localStorage.setItem("user", JSON.stringify(data.user));
       if (data.token) {
         localStorage.setItem("token", data.token);
       }
 
-      navigate("/user");
+      // ✅ Clear form after login
+      setEmail("");
+      setPassword("");
 
+      navigate("/user");
     } catch (error) {
-      alert(error.message);
+      alert("Login failed");
     }
   };
 
   return (
-    <div className="container mt-5">
-      <h3>User Login</h3>
+    <div className="auth-container">
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Email"
-          className="form-control mb-3"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        /><br />
+      <div className="auth-card">
+        <h2>Welcome Back</h2>
+        <p>Login to continue booking rooms</p>
 
-        <input
-          type="password"
-          placeholder="Password"
-          className="form-control mb-3"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        /><br />
+        {/* ✅ Disable autofill */}
+        <form onSubmit={handleSubmit} autoComplete="off">
 
-        <button className="btn btn-primary">User Login</button>
-      </form>
+          <input
+            type="email"
+            placeholder="Email Address"
+            value={email}
+            autoComplete="off"
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
 
-      {/* ✅ Register */}
-      <p>
-        Don't have an account? <Link to="/register">Register</Link>
-      </p>
+          {/* PASSWORD FIELD */}
+          <div className="password-wrapper">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              value={password}
+              autoComplete="new-password"
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
 
-      {/* ✅ Forgot Password */}
-      <p>
-        <Link to="/forgot-password">Forgot Password?</Link>
-      </p>
+            <span
+              className="toggle-password"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? "🙈" : "👁️"}
+            </span>
+          </div>
+
+          <button type="submit">Login</button>
+        </form>
+
+        <p className="auth-footer">
+          Don't have an account? <Link to="/register">Register</Link>
+        </p>
+
+        <p className="auth-footer">
+          <Link to="/forgot-password">Forgot Password?</Link>
+        </p>
+      </div>
+
     </div>
   );
 };

@@ -8,12 +8,19 @@ export const createBooking = async (bookingData) => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`, // ✅ REQUIRED
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(bookingData),
   });
 
-  return res.json();
+  const data = await res.json();
+
+  // ❗ HANDLE ERROR PROPERLY
+  if (!res.ok) {
+    throw new Error(data.message || "Booking failed");
+  }
+
+  return data;
 };
 
 // ✅ Get logged-in user's bookings (NO email needed anymore)

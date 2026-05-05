@@ -19,7 +19,8 @@ import MyBookings from "./pages/User/MyBookings";
 import NewBooking from "./pages/Booking/NewBooking";
 import BookingDetails from "./pages/Booking/BookingDetails";
 import BookingHistory from "./pages/Booking/BookingHistory";
-
+import PaymentPage from "./pages/Payment/PaymentPage";
+import PaymentSuccess from "./pages/Payment/PaymentSuccess";
 function App() {
   const location = useLocation();
 
@@ -62,7 +63,9 @@ function App() {
         <Route path="/newbooking" element={<NewBooking />} />
         <Route path="/bookingdetails" element={<BookingDetails />} />
         <Route path="/bookinghistory" element={<BookingHistory />} />
-
+        {/*Payment*/}
+        <Route path="/payment" element={<PaymentPage />} />
+        <Route path="/payment-success" element={<PaymentSuccess />} />
         {/* Admin */}
         <Route path="/admin/dashboard" element={<Dashboard />} />
         <Route path="/admin/rooms" element={<ManageRooms />} />
