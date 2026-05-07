@@ -22,6 +22,7 @@ const Navbar = () => {
 
             
           </>
+          
         ) : (
           <>
             <Link
@@ -44,7 +45,10 @@ const Navbar = () => {
             >
               Register
             </Link>
+
+            
           </>
+
         )}
 
       </div>

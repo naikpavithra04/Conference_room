@@ -46,7 +46,9 @@ const Rooms = () => {
             {/* Content */}
             <div className="room-content">
               <p><strong>Capacity:</strong> {room.capacity}</p>
-
+<p>
+  <strong>Price:</strong> ₹{room.price}
+</p>
               {/* Amenities (static or from backend later) */}
               <div className="amenities">
                 <span>📶 WiFi</span>
@@ -64,13 +66,15 @@ const Rooms = () => {
                 </button>
 
                 <button
-                  className="book-btn"
-                  onClick={() =>
-                    navigate(`/newbooking?roomId=${room._id}`)
-                  }
-                >
-                  Book Now
-                </button>
+  className="book-btn"
+  onClick={() =>
+    navigate(
+      `/newbooking?roomId=${room._id}&price=${room.price}`
+    )
+  }
+>
+  Book Now
+</button>
               </div>
             </div>
 

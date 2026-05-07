@@ -13,7 +13,6 @@ import UserDashboard from "./pages/User/UserDashboard";
 import Register from "./pages/User/Register";
 import Rooms from "./pages/User/Rooms";
 import ForgotPassword from "./pages/User/ForgotPassword";
-import ResetPassword from "./pages/User/ResetPassword";
 import Home from "./pages/Home";
 import MyBookings from "./pages/User/MyBookings";
 import NewBooking from "./pages/Booking/NewBooking";
@@ -51,7 +50,6 @@ function App() {
         <Route path="/login/admin" element={<Adminlogin />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password/:token" element={<ResetPassword />} />
 
         {/* User */}
          <Route path="/home"element={<Home/>}/>

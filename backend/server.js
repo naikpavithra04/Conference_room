@@ -16,7 +16,7 @@ app.use("/api/bookings", require("./routes/bookingRoutes"));
 app.use("/api/payments", require("./routes/paymentRoutes"));
 app.use("/api/notifications", require("./routes/notificationRoutes"));
 app.use("/api/rooms", require("./routes/roomRoutes"));
-
+app.use("/api/auth", require("./routes/authRoutes"));
 app.use(errorHandler);
 app.get("/test-admin", (req, res) => {
   res.send("Admin route working");

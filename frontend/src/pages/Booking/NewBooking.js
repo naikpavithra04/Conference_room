@@ -2,8 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const NewBooking = () => {
+
   const query = new URLSearchParams(useLocation().search);
+
+  // ✅ Room ID
   const roomId = query.get("roomId");
+
+  // ✅ Room Price
+  const amount = query.get("price");
 
   const navigate = useNavigate();
 
@@ -12,29 +18,45 @@ const NewBooking = () => {
 
   // ✅ LOGIN CHECK
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user"));
+
+    const storedUser = JSON.parse(
+      localStorage.getItem("user")
+    );
 
     if (!storedUser) {
       alert("Please login first");
       navigate("/login/user");
     }
+
   }, [navigate]);
 
   const handleProceed = () => {
+
     if (!date || !time) {
       alert("Please select date and time");
       return;
     }
 
-    // 👉 Pass booking data to payment page
+    // ✅ Pass amount also
     navigate("/payment", {
-      state: { roomId, date, time }
+      state: {
+        roomId,
+        date,
+        time,
+        amount
+      }
     });
   };
 
   return (
     <div className="container mt-5">
+
       <h3>Book Room</h3>
+
+      {/* ✅ Show Amount */}
+      <h5 className="text-success mb-3">
+        Room Price: ₹{amount}
+      </h5>
 
       <input
         type="date"
@@ -50,9 +72,13 @@ const NewBooking = () => {
         onChange={(e) => setTime(e.target.value)}
       />
 
-      <button className="btn btn-success" onClick={handleProceed}>
+      <button
+        className="btn btn-success"
+        onClick={handleProceed}
+      >
         Proceed to Payment
       </button>
+
     </div>
   );
 };
