@@ -1,8 +1,8 @@
 /* ================= HOME HERO ================= */
 .home .home-hero {
   height: 100vh;
-  background: url("https://images.unsplash.com/photo-1492724441997-5dc865305da7")
-    no-repeat center/cover !important;
+  background: url("https://images.unsplash.com/photo-1517502884422-41eaead166d4?q=80&w=1600&auto=format&fit=crop")
+    no-repeat center center/cover !important;
 }
 
 /* DARK OVERLAY */

@@ -12,7 +12,9 @@ import Reports from "./pages/Admin/Reports";
 import UserDashboard from "./pages/User/UserDashboard";
 import Register from "./pages/User/Register";
 import Rooms from "./pages/User/Rooms";
+import About from "./pages/User/About";
 import ForgotPassword from "./pages/User/ForgotPassword";
+import RoomDetails from "./pages/User/RoomDetails.js";
 import Home from "./pages/Home";
 import MyBookings from "./pages/User/MyBookings";
 import NewBooking from "./pages/Booking/NewBooking";
@@ -56,6 +58,12 @@ function App() {
         <Route path="/user" element={<UserDashboard />} />
         <Route path="/rooms" element={<Rooms />} />
         <Route path="/mybookings" element={<MyBookings />} />
+<Route
+  path="/rooms/:id"
+  element={<RoomDetails />}
+/>
+        <Route path="/about" element={<About />} />
+
 
         {/* Booking */}
         <Route path="/newbooking" element={<NewBooking />} />
