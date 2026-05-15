@@ -15,7 +15,7 @@ const Index = () => {
 >
       <div className="index-overlay">
         <div className="index-content">
-          <h1>Conference Room Booking</h1>
+          <h1>The Vision Corner</h1>
           <p>Book your perfect meeting space with ease</p>
         </div>
       </div>

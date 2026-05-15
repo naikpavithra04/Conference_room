@@ -11,9 +11,13 @@ const ApproveBookings = () => {
 
   const fetchBookings = async () => {
     try {
-      const res = await fetch(`${BASE_URL}/bookings`);
+      // ✅ UPDATED API
+      const res = await fetch(`${BASE_URL}/users/all-bookings`);
+
       const data = await res.json();
+
       setBookings(data);
+
     } catch (err) {
       alert("Failed to load bookings");
     } finally {
@@ -25,15 +29,20 @@ const ApproveBookings = () => {
     try {
       await fetch(`${BASE_URL}/admin/approve`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json"
+        },
         body: JSON.stringify({ id })
       });
 
       setBookings((prev) =>
         prev.map((b) =>
-          b._id === id ? { ...b, status: "approved" } : b
+          b._id === id
+            ? { ...b, status: "approved" }
+            : b
         )
       );
+
     } catch {
       alert("Approval failed");
     }
@@ -43,15 +52,20 @@ const ApproveBookings = () => {
     try {
       await fetch(`${BASE_URL}/admin/reject`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json"
+        },
         body: JSON.stringify({ id })
       });
 
       setBookings((prev) =>
         prev.map((b) =>
-          b._id === id ? { ...b, status: "rejected" } : b
+          b._id === id
+            ? { ...b, status: "rejected" }
+            : b
         )
       );
+
     } catch {
       alert("Rejection failed");
     }
@@ -67,15 +81,23 @@ const ApproveBookings = () => {
 
   return (
     <div style={styles.page}>
-      <h2 style={styles.title}>📋 Approve Bookings</h2>
+      <h2 style={styles.title}>
+        📋 Approve Bookings
+      </h2>
 
       <div style={styles.card}>
         <table style={styles.table}>
           <thead>
             <tr>
               <th style={styles.th}>User</th>
-              <th style={styles.th}>Room</th>
+
+              {/* ✅ UPDATED */}
+              <th style={styles.th}>
+                Room Details
+              </th>
+
               <th style={styles.th}>Date</th>
+              <th style={styles.th}>Time</th>
               <th style={styles.th}>Status</th>
               <th style={styles.th}>Action</th>
             </tr>
@@ -84,34 +106,87 @@ const ApproveBookings = () => {
           <tbody>
             {bookings.length === 0 ? (
               <tr>
-                <td colSpan="5" style={styles.empty}>
+                <td
+                  colSpan="6"
+                  style={styles.empty}
+                >
                   No bookings found
                 </td>
               </tr>
             ) : (
               bookings.map((b) => (
-                <tr key={b._id} style={styles.row}>
-                  <td style={styles.td}>{b.email}</td>
-                  <td style={styles.td}>{b.roomId}</td>
+                <tr
+                  key={b._id}
+                  style={styles.row}
+                >
+                  {/* USER EMAIL */}
                   <td style={styles.td}>
-                    {new Date(b.date).toLocaleDateString()}
+                    {b.email}
                   </td>
 
+                  {/* ✅ ROOM DETAILS */}
                   <td style={styles.td}>
-                    <span style={getStatusStyle(b.status)}>
+                    <div style={styles.roomCard}>
+                      <strong>
+                        {b.room?.name}
+                      </strong>
+
+                      <br />
+
+                      {b.room?.location}
+
+                      <br />
+
+                      Capacity:
+                      {" "}
+                      {b.room?.capacity}
+
+                      <br />
+
+                      ₹{b.room?.price}
+                    </div>
+                  </td>
+
+                  {/* DATE */}
+                  <td style={styles.td}>
+                    {new Date(
+                      b.date
+                    ).toLocaleDateString()}
+                  </td>
+
+                  {/* TIME */}
+                  <td style={styles.td}>
+                    {b.time}
+                  </td>
+
+                  {/* STATUS */}
+                  <td style={styles.td}>
+                    <span
+                      style={getStatusStyle(
+                        b.status
+                      )}
+                    >
                       {b.status}
                     </span>
                   </td>
 
+                  {/* ACTIONS */}
                   <td style={styles.td}>
                     <button
                       style={{
                         ...styles.btn,
                         ...styles.approveBtn,
-                        opacity: b.status !== "pending" ? 0.5 : 1
+                        opacity:
+                          b.status !== "pending"
+                            ? 0.5
+                            : 1
                       }}
-                      disabled={b.status !== "pending"}
-                      onClick={() => approveBooking(b._id)}
+                      disabled={
+                        b.status !== "pending"
+                      }
+                      onClick={() =>
+                        approveBooking(b._id)
+                      }
                     >
                       Approve
                     </button>
@@ -121,10 +196,17 @@ const ApproveBookings = () => {
                         ...styles.btn,
                         ...styles.rejectBtn,
                         marginLeft: "8px",
-                        opacity: b.status !== "pending" ? 0.5 : 1
+                        opacity:
+                          b.status !== "pending"
+                            ? 0.5
+                            : 1
                       }}
-                      disabled={b.status !== "pending"}
-                      onClick={() => rejectBooking(b._id)}
+                      disabled={
+                        b.status !== "pending"
+                      }
+                      onClick={() =>
+                        rejectBooking(b._id)
+                      }
                     >
                       Reject
                     </button>
@@ -150,35 +232,44 @@ const styles = {
     minHeight: "100vh",
     fontFamily: "Arial"
   },
+
   title: {
     fontSize: "28px",
     fontWeight: "bold",
     marginBottom: "20px",
     color: "#111"
   },
+
   card: {
     background: "#fff",
     borderRadius: "12px",
     padding: "20px",
-    boxShadow: "0 4px 15px rgba(0,0,0,0.08)"
+    boxShadow:
+      "0 4px 15px rgba(0,0,0,0.08)"
   },
+
   table: {
     width: "100%",
     borderCollapse: "collapse"
   },
+
   th: {
     textAlign: "left",
     padding: "12px",
     borderBottom: "1px solid #eee",
     color: "#555"
   },
+
   td: {
     padding: "12px",
-    borderBottom: "1px solid #f1f1f1"
+    borderBottom: "1px solid #f1f1f1",
+    verticalAlign: "top"
   },
+
   row: {
     transition: "0.2s"
   },
+
   btn: {
     padding: "6px 10px",
     borderRadius: "6px",
@@ -186,36 +277,52 @@ const styles = {
     cursor: "pointer",
     fontSize: "13px"
   },
+
   approveBtn: {
     background: "#16a34a",
     color: "#fff"
   },
+
   rejectBtn: {
     background: "#dc2626",
     color: "#fff"
   },
+
   empty: {
     textAlign: "center",
     padding: "20px",
     color: "#888"
   },
+
   loader: {
     textAlign: "center",
     marginTop: "50px",
     fontSize: "18px"
+  },
+
+  /* ✅ NEW STYLE */
+  roomCard: {
+    background: "#f9fafb",
+    padding: "10px",
+    borderRadius: "8px",
+    lineHeight: "1.6"
   }
 };
 
-/* dynamic status style */
+/* ---------- STATUS STYLE ---------- */
+
 const getStatusStyle = (status) => ({
   padding: "4px 10px",
   borderRadius: "20px",
   fontSize: "12px",
   color: "#fff",
+
   background:
     status === "approved"
       ? "#16a34a"
       : status === "rejected"
       ? "#dc2626"
-      : "#f59e0b"
+      : status === "cancelled"
+      ? "#6b7280"
+      : "#f59e0b",
 });

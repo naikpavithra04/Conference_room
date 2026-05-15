@@ -49,10 +49,6 @@ const RoomDetails = () => {
               a separate payment.
             </li>
 
-            <li className="list-group-item">
-              ❌ Once a room is booked,
-              <strong> cancellation is not allowed.</strong>
-            </li>
 
             <li className="list-group-item">
               🚫 Do not damage any room property,

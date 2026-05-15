@@ -1,12 +1,13 @@
 const User = require("../models/User");
 const Room = require("../models/Room");
-const Booking=require("../models/Booking");
+const Booking = require("../models/Booking");
+
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+
 const { JWT_SECRET } = require("../config/env");
 
 /* ================= REGISTER ================= */
-
 
 exports.register = async (req, res) => {
   try {
@@ -43,23 +44,30 @@ exports.register = async (req, res) => {
 
 /* ================= LOGIN ================= */
 
-
 exports.login = async (req, res) => {
-   console.log("LOGIN CONTROLLER HIT"); 
+  console.log("LOGIN CONTROLLER HIT");
+
   try {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(400).json({ message: "User not found" });
+      return res.status(400).json({
+        message: "User not found",
+      });
     }
 
-    // ✅ FIX IS HERE
-    const isMatch = await bcrypt.compare(password, user.password);
+    // ✅ Compare password
+    const isMatch = await bcrypt.compare(
+      password,
+      user.password
+    );
 
     if (!isMatch) {
-      return res.status(400).json({ message: "Wrong password" });
+      return res.status(400).json({
+        message: "Wrong password",
+      });
     }
 
     const token = jwt.sign(
@@ -73,38 +81,72 @@ exports.login = async (req, res) => {
     res.json({ token, user });
 
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      message: error.message,
+    });
   }
 };
 
 /* ================= GET ROOMS ================= */
+
 exports.getRooms = async (req, res) => {
   try {
     const rooms = await Room.find();
+
     res.json(rooms);
+
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      message: error.message,
+    });
   }
 };
 
 /* ================= BOOK ROOM ================= */
+
 exports.bookRoom = async (req, res) => {
   try {
-    res.json({ message: "Room booked successfully" });
+    res.json({
+      message: "Room booked successfully",
+    });
+
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      message: error.message,
+    });
   }
 };
 
 /* ================= GET MY BOOKINGS ================= */
+
 exports.getMyBookings = async (req, res) => {
   try {
-    const bookings = await Booking
-      .find({ email: req.user.email }) // ✅ secure
-      .populate("room");
+    const bookings = await Booking.find({
+      email: req.params.email,
+    }).populate("room");
 
     res.json(bookings);
+
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+/* ================= GET ALL BOOKINGS (ADMIN) ================= */
+
+exports.getAllBookings = async (req, res) => {
+  try {
+    const bookings = await Booking.find()
+      .populate("room")
+      .populate("user");
+
+    res.json(bookings);
+
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
   }
 };

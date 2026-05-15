@@ -19,7 +19,7 @@ const Navbar = () => {
             <span className="text-white me-3">
               Welcome {user.name}
             </span>
-
+        
             
           </>
           

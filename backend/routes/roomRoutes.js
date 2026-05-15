@@ -3,12 +3,20 @@ const router = require("express").Router();
 const {
   addRoom,
   getRooms,
-  deleteRoom
+  deleteRoom,
+  updateRoom
 } = require("../controllers/roomController");
 
-// CRUD routes
+// ================= GET ALL ROOMS =================
 router.get("/", getRooms);
+
+// ================= ADD ROOM =================
 router.post("/", addRoom);
+
+// ================= UPDATE ROOM =================
+router.put("/:id", updateRoom);
+
+// ================= DELETE ROOM =================
 router.delete("/:id", deleteRoom);
 
 module.exports = router;

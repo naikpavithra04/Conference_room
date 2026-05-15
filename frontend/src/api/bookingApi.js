@@ -23,6 +23,25 @@ export const createBooking = async (bookingData) => {
   return data;
 };
 
+export const cancelBooking = async (bookingId) => { 
+  const token = localStorage.getItem("token"); 
+ 
+  const res = await fetch(`${BASE_URL}/bookings/${bookingId}/cancel`, { 
+    method: "PATCH", 
+    headers: { 
+      Authorization: `Bearer ${token}`, 
+    }, 
+  }); 
+ 
+  const data = await res.json(); 
+ 
+  if (!res.ok) { 
+    throw new Error(data.message || "Cancellation failed"); 
+  } 
+ 
+  return data; 
+};
+
 // ✅ Get logged-in user's bookings (NO email needed anymore)
 export const getMyBookings = async () => {
   const token = localStorage.getItem("token");

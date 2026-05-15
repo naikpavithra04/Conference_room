@@ -5,7 +5,7 @@ export default function About() {
       <div className="max-w-6xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden">
         <div className="bg-gradient-to-r from-indigo-700 to-purple-700 text-white p-10 text-center">
           <h1 className="text-5xl font-bold mb-4">
-            Conference Room Booking System
+           The Vision Corner
           </h1>
 
           <p className="text-lg opacity-90 max-w-3xl mx-auto leading-relaxed">
@@ -127,7 +127,7 @@ export default function About() {
                 Address
               </h3>
               <p>
-                Conference Booking Center,
+                The Vision Corner,
                 Business Park,
                 Bangalore, India
               </p>

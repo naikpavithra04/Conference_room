@@ -109,38 +109,7 @@ const Reports = () => {
         </ResponsiveContainer>
       </div>
 
-      {/* APPROVED USERS TABLE */}
-      <div style={styles.tableBox}>
-        <h3>Approved Users</h3>
-
-        <table style={styles.table}>
-          <thead>
-            <tr>
-              <th>Email</th>
-              <th>Room</th>
-              <th>Date</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {report.users && report.users.length > 0 ? (
-              report.users.map((u, i) => (
-                <tr key={i}>
-                  <td>{u.email}</td>
-                  <td>{u.roomId}</td>
-                  <td>{u.date}</td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="3" style={{ textAlign: "center" }}>
-                  No approved users
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+      
     </div>
   );
 };
@@ -185,16 +154,5 @@ const styles = {
     padding: "20px",
     borderRadius: "12px",
     marginBottom: "20px"
-  },
-
-  tableBox: {
-    background: "#fff",
-    padding: "20px",
-    borderRadius: "12px"
-  },
-
-  table: {
-    width: "100%",
-    borderCollapse: "collapse"
   }
 };

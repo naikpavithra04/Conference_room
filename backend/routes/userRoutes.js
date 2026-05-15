@@ -2,7 +2,9 @@ const express = require("express");
 const router = express.Router();
 
 const userController = require("../controllers/userController");
+
 router.post("/register", userController.register);
+
 /* ================= LOGIN ================= */
 router.post("/login", userController.login);
 
@@ -10,6 +12,7 @@ router.get("/test", (req, res) => {
   console.log("TEST ROUTE WORKING");
   res.send("User route working");
 });
+
 /* ================= ROOMS ================= */
 router.get("/rooms", userController.getRooms);
 
@@ -18,5 +21,8 @@ router.post("/book", userController.bookRoom);
 
 /* ================= MY BOOKINGS ================= */
 router.get("/bookings/:email", userController.getMyBookings);
+
+/* ================= ADMIN BOOKINGS ================= */
+router.get("/all-bookings", userController.getAllBookings);
 
 module.exports = router;

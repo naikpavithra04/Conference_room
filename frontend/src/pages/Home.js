@@ -20,7 +20,7 @@ const Home = () => {
 >
         <div className="home-overlay">
           <div className="hero-content">
-            <h1>Conference Room Booking</h1>
+            <h1>The Vision Corner</h1>
             <p>Smart, seamless, and modern way to reserve meeting spaces</p>
 
             <div className="hero-buttons">
